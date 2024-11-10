@@ -1,0 +1,36 @@
+package templates 
+
+templ NewPasteForm() {
+	<form
+		hx-swap="outerHTML"
+		hx-target="this"
+		enctype="multipart/form-data"
+		hx-post="/forms/new-paste"
+	>
+		<button hx-get="/components/new-paste-button">Abort</button>
+		<h2>New Paste</h2>
+		<input type="file" id="file" name="file" required/>
+		<button type="submit" hx-indicator="">Upload</button>
+		<div class="loader"></div>
+	</form>
+}
+
+templ Error(message string) {
+	<div hx-swap="outerHTML" hx-target="this">
+		<h2>Error</h2>
+		<p>{ message }</p>
+		@NewPasteButton()
+	</div>
+}
+
+templ NewPasteButton() {
+	<button hx-get="/components/new-paste-form" hx-swap="outerHTML">New paste</button>
+}
+
+templ UploadSuccessFul(hash string) {
+	<div hx-swap="outerHTML" hx-target="this">
+		<h2>Success</h2>
+		<p><a href={ templ.URL("/store/" + hash[:2] + "/" + hash[2:]) }>Link to virus file</a></p>
+		@NewPasteButton()
+	</div>
+}
